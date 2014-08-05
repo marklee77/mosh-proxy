@@ -1,0 +1,7 @@
+#!/bin/bash
+MOSH_HOST=$1
+MOSH_PORT=$2
+echo $MOSH_HOST
+echo $MOSH_PORT
+nc -u -l localhost 60073 | nc -u localhost ${MOSH_PORT}
+echo "MOSH CONNECT 60073 ${MOSH_KEY}"

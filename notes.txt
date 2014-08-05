@@ -1,0 +1,11 @@
+mosh-server 2>/dev/null | grep "MOSH CONNECT" | read MOSH CONNECT PORT MOSH_KEY; stone 127.0.0.1:${PORT}/udp 60023/udp & MOSH_KEY=$MOSH_KEY mosh-client 127.0.0.1 60023
+
+ssh -q fwhost ssh -q host2 mosh-server 2>/dev/null | grep "MOSH CONNECT" | read MOSH CONNECT PORT MOSH_KEY
+ssh -q fwhost stone host2:${PORT}/udp 60023/udp & 
+MOSH_KEY=$MOSH_KEY mosh-client fwhost 60023
+
+mosh --server="mosh --client=mosh-proxy-helper farhost" nearhost
+
+
+netcat -l -u -p 60001 | netcat localhost ${LOCAL_TCP_PORT}
+ssh -L ${LOCAL_TCP_PORT}:localhost${REMOTE_TCP_PORT} ${REMOTE_HOST} netcat -l -p ${REMOTE_TCP_PORT} | netcat -u ${MOSH_IP} ${MOSH_PORT}

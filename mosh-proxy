@@ -1,0 +1,5 @@
+#!/usr/bin/zsh
+HOST=$1
+ssh -t ${HOST} mosh-server | grep "MOSH CONNECT" | read MOSH CONNECT MOSH_PORT MOSH_KEY
+stone ${HOST}:${MOSH_PORT}/udp 60023/udp & 
+echo "MOSH CONNECT 60050 ${MOSH_KEY}"
